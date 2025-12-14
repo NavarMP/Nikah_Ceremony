@@ -1,141 +1,222 @@
-.page {
-  --background: #fafafa;
-  --foreground: #fff;
-
-  --text-primary: #000;
-  --text-secondary: #666;
-
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-  --button-secondary-border: #ebebeb;
-
-  display: flex;
+/* page.module.css */
+.container {
   min-height: 100vh;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-geist-sans);
-  background-color: var(--background);
-}
-
-.main {
-  display: flex;
-  min-height: 100vh;
-  width: 100%;
-  max-width: 800px;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  background-color: var(--foreground);
-  padding: 120px 60px;
-}
-
-.intro {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-  gap: 24px;
-}
-
-.intro h1 {
-  max-width: 320px;
-  font-size: 40px;
-  font-weight: 600;
-  line-height: 48px;
-  letter-spacing: -2.4px;
-  text-wrap: balance;
-  color: var(--text-primary);
-}
-
-.intro p {
-  max-width: 440px;
-  font-size: 18px;
-  line-height: 32px;
-  text-wrap: balance;
-  color: var(--text-secondary);
-}
-
-.intro a {
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.ctas {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  max-width: 440px;
-  gap: 16px;
-  font-size: 14px;
-}
-
-.ctas a {
-  display: flex;
-  justify-content: center;
   align-items: center;
-  height: 40px;
-  padding: 0 16px;
-  border-radius: 128px;
-  border: 1px solid transparent;
-  transition: 0.2s;
-  cursor: pointer;
-  width: fit-content;
-  font-weight: 500;
+  justify-content: flex-start;
+  width: 100%;
+  /* background handled by body for full gradient */
+  padding: 2rem 1rem;
+  text-align: center;
+  overflow: hidden;
 }
 
-a.primary {
-  background: var(--text-primary);
-  color: var(--background);
-  gap: 8px;
+/* Floral/Ornamental Borders - can be added via pseudo-elements or Image component */
+.ornamentTop,
+.ornamentBottom {
+  position: absolute;
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.8;
 }
 
-a.secondary {
-  border-color: var(--button-secondary-border);
+.ornamentTop {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
-    background: var(--button-primary-hover);
-    border-color: transparent;
+.ornamentBottom {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) rotate(180deg);
+}
+
+.contentWrapper {
+  z-index: 2;
+  width: 100%;
+  max-width: 600px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 40px;
+  /* Modern rounded corners, moved away from arch for glass look */
+  padding: 4rem 2rem 2rem 2rem;
+  margin-top: 2rem;
+  box-shadow: var(--glass-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  transition: background 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.saveTheDate {
+  font-family: var(--font-script);
+  font-size: 2.5rem;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.namesWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.name {
+  font-family: var(--font-primary);
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--color-dark);
+  line-height: 1.1;
+}
+
+.ampersand {
+  font-family: var(--font-script);
+  font-size: 2rem;
+  color: var(--color-gold);
+  margin: 0.5rem 0;
+}
+
+.message {
+  font-family: var(--font-secondary);
+  font-size: 1rem;
+  color: #666;
+  font-style: italic;
+  margin: 1rem 0;
+  line-height: 1.6;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+  margin: 1.5rem 0;
+}
+
+.dateSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dateLarge {
+  font-family: var(--font-primary);
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--color-gold);
+  line-height: 1;
+}
+
+.dateMonthYear {
+  font-family: var(--font-primary);
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--color-dark);
+  border-top: 1px solid var(--color-dark);
+  border-bottom: 1px solid var(--color-dark);
+  padding: 0.5rem 1rem;
+}
+
+.timeLocation {
+  font-family: var(--font-secondary);
+  font-size: 1rem;
+  color: var(--color-dark);
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.locationTitle {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--color-gold);
+}
+
+.duaSection {
+  margin-top: 2rem;
+  padding: 2rem;
+  background-color: rgba(197, 160, 89, 0.05);
+  border-radius: 10px;
+  border: 1px dashed var(--color-gold);
+}
+
+.arabic {
+  font-family: 'Amiri', 'Traditional Arabic', serif;
+  /* Fallback if no specific font loaded yet, system fonts usually ok */
+  font-size: 1.5rem;
+  color: var(--color-dark);
+  margin-bottom: 1rem;
+  line-height: 2;
+  direction: rtl;
+}
+
+.translation {
+  font-family: var(--font-secondary);
+  font-size: 0.9rem;
+  color: #666;
+  font-style: italic;
+}
+
+.footer {
+  margin-top: 2rem;
+  font-family: var(--font-script);
+  font-size: 1.5rem;
+  color: var(--color-gold);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
 
-  a.secondary:hover {
-    background: var(--button-secondary-hover);
-    border-color: transparent;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-@media (max-width: 600px) {
-  .main {
-    padding: 48px 24px;
+.contentWrapper {
+  animation: fadeIn 1.5s ease-out;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .name {
+    font-size: 2.5rem;
   }
 
-  .intro {
-    gap: 16px;
+  .dateLarge {
+    font-size: 3rem;
   }
 
-  .intro h1 {
-    font-size: 32px;
-    line-height: 40px;
-    letter-spacing: -1.92px;
+  .contentWrapper {
+    padding: 3rem 1.5rem;
+    border-radius: 150px 150px 0 0;
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  .logo {
-    filter: invert();
+@media (max-width: 480px) {
+  .name {
+    font-size: 2rem;
   }
 
-  .page {
-    --background: #000;
-    --foreground: #000;
+  .saveTheDate {
+    font-size: 2rem;
+  }
 
-    --text-primary: #ededed;
-    --text-secondary: #999;
-
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-    --button-secondary-border: #1a1a1a;
+  .dateMonthYear {
+    font-size: 1rem;
+    letter-spacing: 1px;
   }
 }
