@@ -1,0 +1,77 @@
+:root {
+  --background: #fdfbf7;
+  --foreground: #4a4a4a;
+  --primary: #b76e79;
+  /* Rose Gold */
+  --secondary: #778b77;
+  /* Sage Green */
+  --accent-pink: #fce4ec;
+  --card: #ffffff;
+  --border: #e5e5e5;
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --color-gold: #b76e79;
+  /* Mapping old gold var to new primary for compatibility */
+
+  /* UI Redesign Vars */
+  --background-gradient: linear-gradient(135deg, #fff0f5 0%, #e8f5e9 100%);
+  /* Soft Pink to Sage gradient */
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-shadow: 0 8px 32px 0 rgba(183, 110, 121, 0.1);
+}
+
+.dark {
+  --background: #1a1a1a;
+  --foreground: #e5e5e5;
+  --primary: #e6b3bc;
+  --secondary: #9caf9c;
+  --accent-pink: #2a1a1e;
+  --card: #262626;
+  --border: #404040;
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.18);
+  --color-gold: #e6b3bc;
+
+  /* UI Redesign Vars Dark */
+  --background-gradient: linear-gradient(135deg, #1f1214 0%, #121812 100%);
+  --glass-bg: rgba(30, 30, 30, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  background: var(--background-gradient);
+  background-attachment: fixed;
+  /* Keeps gradient fixed on scroll */
+  color: var(--foreground);
+  transition: background 0.3s ease, color 0.3s ease;
+  font-family: var(--font-secondary);
+  /* Default font */
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+
+
+/* Font Utilities */
+/* Font Utilities */
+.font-malayalam,
+.font-malayalam * {
+  font-family: var(--font-malayalam) !important;
+}
+
+.font-arabic,
+.font-arabic * {
+  font-family: var(--font-arabic) !important;
+}
