@@ -1,8 +1,8 @@
 'use client';
 
 import Image from "next/image";
-import { useRef } from 'react';
-import { Heart } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Heart, Calendar, MapPin } from 'lucide-react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import styles from "./page.module.css";
@@ -16,8 +16,17 @@ import { useLanguage } from "@/context/LanguageContext";
 export default function Home() {
   const { t, dir, language } = useLanguage();
   const containerRef = useRef<HTMLElement>(null);
+  const [randomQuote, setRandomQuote] = useState<string>("");
 
   const fontClass = language === 'ml' ? 'font-malayalam' : language === 'ar' ? 'font-arabic' : '';
+
+  useEffect(() => {
+    // Select a random quote on mount
+    if (t.quotes && t.quotes.length > 0) {
+      const randomIndex = Math.floor(Math.random() * t.quotes.length);
+      setRandomQuote(t.quotes[randomIndex]);
+    }
+  }, [t.quotes]);
 
   useGSAP(() => {
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
@@ -59,17 +68,16 @@ export default function Home() {
             <span className={styles.circle + " " + styles.circle3}></span>
             <span className={styles.circle + " " + styles.circle4}></span>
             <span className={styles.circle + " " + styles.circle5}>
-              {/* Small heart icon or similar in center */}
-              <svg viewBox="0 0 24 24" fill="" height="24" width="24" className={styles.svg} style={{ fill: 'white' }}>
-                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
-              </svg>
             </span>
           </div>
 
           <div className={styles.glass}></div>
 
           <div className={styles.content}>
-            <div className={styles.saveTheDate}>{t.saveTheDate}</div>
+            {/* Bismillah at the top */}
+            <div className={styles.bismillah} style={{ fontFamily: 'var(--font-arabic)', fontSize: '1.5rem', height: 'auto', color: 'var(--color-gold)', marginBottom: '1rem' }}>
+              {t.bismillah}
+            </div>
 
             <div className={styles.namesWrapper}>
               <h1 className={styles.name}>{t.names.groom}</h1>
@@ -86,52 +94,75 @@ export default function Home() {
               <h1 className={styles.name}>{t.names.bride}</h1>
             </div>
 
-            <p className={styles.message}>
+            <p className={styles.message} style={{ whiteSpace: 'pre-wrap' }}>
               {t.message}
             </p>
 
             <div className={styles.divider}></div>
 
+            {/* Moved Save the Date here */}
+            <div className={styles.saveTheDate} style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>{t.saveTheDate}</div>
+
             <div className={styles.dateSection}>
-              <div className={styles.dateMonthYear}>{t.date.monthYear}</div>
+              <div className={styles.dateMonthYear} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center' }}>
+                <Calendar size={18} color="var(--color-dark)" />
+                {t.date.monthYear}
+              </div>
               <div className={styles.dateLarge}>{t.date.day}</div>
               <div className={styles.dateMonthYear}>{t.date.details}</div>
             </div>
 
             <Countdown />
 
+            <div className={styles.actionsRow} style={{ marginTop: '1.5rem', marginBottom: '1rem' }}>
+              <WebReminder />
+              <AddToCalendar />
+            </div>
+
             <div className={styles.timeLocation}>
-              <span className={styles.locationTitle}>{t.location.title}</span>
-              <span>{t.location.line1}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center', color: 'var(--color-gold)', fontWeight: 'bold' }}>
+                <MapPin size={18} />
+                <span>{t.location.line1}</span>
+              </div>
               <span>{t.location.line2}</span>
             </div>
           </div>
 
           <div className={styles.bottom} style={{ flexDirection: 'column', gap: '1rem' }}>
-            <div className={styles.actionsRow}>
-              <WebReminder />
-              <AddToCalendar />
+            <div className={styles.actionsRow} style={{ width: '100%' }}>
+              <LocationMap />
             </div>
-            <div className={styles.actionsRow}>
-              <LocationMap /> {/* Map usually is a button or modal trigger? The component implementation varies. Assuming it's a view button as originally designed? Actually currently LocationMap is likely a button. */}
+            <div className={styles.actionsRow} style={{ marginTop: '1.5rem' }}>
               <DownloadFlyer />
             </div>
           </div>
 
           {/* Moved Dua Section to Bottom */}
           <div className={styles.duaSection} style={{ border: 'none', background: 'none', padding: '1rem 0 0 0' }}>
-            <p className={styles.arabic}>
-              {t.dua}
-            </p>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
+              <Image
+                src="/assets/barakallah.svg"
+                alt={t.dua}
+                width={300}
+                height={80}
+                style={{ width: '85%', height: 'auto', maxWidth: '400px' }}
+              />
+            </div>
             <p className={styles.translation}>
               {t.duaTranslation}
             </p>
           </div>
+
+          {/* Rotating Quote at Bottom */}
+          {randomQuote && (
+            <div className={styles.quote} style={{ fontFamily: 'var(--font-primary)', fontSize: '1.25rem', fontStyle: 'italic', fontWeight: '500', color: 'var(--color-dark)', marginTop: '1.5rem', padding: '0 1rem', lineHeight: '1.4' }}>
+              "{randomQuote}"
+            </div>
+          )}
         </div>
       </div>
 
       <footer className={styles.footer} style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-        <div>{t.reception}</div>
         <div style={{ fontSize: '0.8rem', fontFamily: 'var(--font-secondary)', opacity: 0.8, marginTop: '1rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
           Made with <Heart size={14} fill="#e25555" stroke="none" />
         </div>

@@ -1,6 +1,5 @@
 'use client';
 
-import { MapPin } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
 export function LocationMap() {
@@ -52,7 +51,6 @@ export function LocationMap() {
                     fontSize: '1rem'
                 }}
             >
-                <MapPin size={18} />
                 {t.getDirections}
             </a>
         </div>

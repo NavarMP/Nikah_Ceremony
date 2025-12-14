@@ -313,7 +313,7 @@
 /* CSS Heart Animation (User Provided) */
 .heartWrapper {
   position: relative;
-  width: 90%;
+  width: 96%;
   height: 100px;
   /* Space for the heart */
   display: flex;

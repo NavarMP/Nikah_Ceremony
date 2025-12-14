@@ -2,12 +2,17 @@ export type Language = 'en' | 'ml' | 'ar';
 
 export const dictionary = {
     en: {
+        bismillah: "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
         saveTheDate: "Save the Date",
         names: {
             groom: "Binyamin Azhari",
             bride: "Nasla Wafiyya",
         },
         message: "We want to share happiness with our loved ones. Come and celebrate our Nikah ceremony.",
+        quotes: [
+            "Love is the bridge between two hearts",
+            "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا"
+        ],
         date: {
             monthYear: "2025 December",
             day: "26",
@@ -25,12 +30,17 @@ export const dictionary = {
         getDirections: "Get Directions",
     },
     ml: {
+        bismillah: "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
         saveTheDate: "തിയ്യതി കുറിച്ചുവെക്കൂ",
         names: {
             groom: "ബിൻയാമിൻ അസ്ഹരി",
             bride: "നസ്‌ല വഫിയ്യ",
         },
         message: "ഞങ്ങളുടെ സന്തോഷത്തിൽ പങ്കുചേരാൻ നിങ്ങളെ ക്ഷണിക്കുന്നു. ഞങ്ങളുടെ നിക്കാഹ് ചടങ്ങിൽ പങ്കെടുക്കൂ.",
+        quotes: [
+            "Love is the bridge between two hearts",
+            "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا"
+        ],
         date: {
             monthYear: "2025 ഡിസംബർ",
             day: "26",
@@ -48,12 +58,17 @@ export const dictionary = {
         getDirections: "വഴി അറിയാൻ",
     },
     ar: {
+        bismillah: "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
         saveTheDate: "احفظ التاريخ",
         names: {
             groom: "بنيامين الأزهري",
             bride: "نسلة الوفية",
         },
         message: "نود أن نشارك فرحتنا مع أحبائنا. تعالوا واحتفلوا معنا بمراسم النكاح.",
+        quotes: [
+            "Love is the bridge between two hearts",
+            "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا"
+        ],
         date: {
             monthYear: "ديسمبر ٢٠٢٥",
             day: "٢٦",
