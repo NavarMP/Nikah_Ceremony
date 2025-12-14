@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useRef } from 'react';
+import { Heart } from 'lucide-react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import styles from "./page.module.css";
@@ -129,8 +130,11 @@ export default function Home() {
         </div>
       </div>
 
-      <footer className={styles.footer} style={{ position: 'relative', zIndex: 10 }}>
-        {t.reception}
+      <footer className={styles.footer} style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+        <div>{t.reception}</div>
+        <div style={{ fontSize: '0.8rem', fontFamily: 'var(--font-secondary)', opacity: 0.8, marginTop: '1rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+          Made with <Heart size={14} fill="#e25555" stroke="none" />
+        </div>
       </footer>
     </main>
   );
