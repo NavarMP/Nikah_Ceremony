@@ -153,12 +153,19 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Rotating Quote at Bottom */}
+          {/* Rotating Quote at Bottom
           {randomQuote && (
-            <div className={styles.quote} style={{ fontFamily: 'var(--font-primary)', fontSize: '1.25rem', fontStyle: 'italic', fontWeight: '500', color: 'var(--color-dark)', marginTop: '1.5rem', padding: '0 1rem', lineHeight: '1.4' }}>
-              "{randomQuote}"
+            <div style={{ marginTop: '1.5rem', padding: '0 1rem' }}>
+              <div className={styles.quote} style={{ fontFamily: 'var(--font-arabic)', fontSize: '1.3rem', fontWeight: '500', color: 'var(--color-dark)', whiteSpace: 'pre-wrap', lineHeight: '1.5', direction: 'rtl' }}>
+                "{randomQuote}"
+              </div>
+              {t.quoteTranslation && (
+                <div style={{ fontFamily: language === 'ml' ? 'var(--font-malayalam)' : 'var(--font-secondary)', fontSize: '0.9rem', fontStyle: 'italic', color: '#666', marginTop: '0.5rem', lineHeight: '1.4' }}>
+                  {t.quoteTranslation}
+                </div>
+              )}
             </div>
-          )}
+          )} */}
         </div>
       </div>
 
