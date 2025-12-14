@@ -31,7 +31,6 @@ export function AddToCalendar() {
                 borderRadius: '50px',
                 textDecoration: 'none',
                 fontWeight: 'bold',
-                marginTop: '20px',
                 transition: 'transform 0.2s',
                 boxShadow: 'var(--shadow)'
             }}

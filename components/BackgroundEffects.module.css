@@ -1,0 +1,93 @@
+.backgroundEffects {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    /* Behind content which is usually z-index 1 or 2 */
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.light1,
+.light2,
+.light3 {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+.light1 {
+    top: -10%;
+    left: -10%;
+    width: 50vw;
+    height: 50vw;
+    background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+    animation: move1 20s infinite;
+}
+
+.light2 {
+    bottom: -10%;
+    right: -10%;
+    width: 60vw;
+    height: 60vw;
+    background: radial-gradient(circle, var(--secondary) 0%, transparent 70%);
+    animation: move2 25s infinite;
+}
+
+.light3 {
+    top: 40%;
+    left: 40%;
+    width: 40vw;
+    height: 40vw;
+    background: radial-gradient(circle, var(--accent-pink) 0%, transparent 70%);
+    animation: move3 30s infinite;
+}
+
+@keyframes move1 {
+
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    33% {
+        transform: translate(10vw, 10vh) scale(1.1);
+    }
+
+    66% {
+        transform: translate(-5vw, 20vh) scale(0.9);
+    }
+}
+
+@keyframes move2 {
+
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    33% {
+        transform: translate(-10vw, -10vh) scale(1.2);
+    }
+
+    66% {
+        transform: translate(5vw, -5vh) scale(0.8);
+    }
+}
+
+@keyframes move3 {
+
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    50% {
+        transform: translate(20vw, -20vh) scale(1.1);
+    }
+}

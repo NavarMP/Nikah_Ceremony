@@ -1,6 +1,8 @@
 import { Playfair_Display, Lato, Great_Vibes, Anek_Malayalam, Zain } from "next/font/google";
 import { Providers } from "./providers";
 import { SmoothScrolling } from "@/components/SmoothScrolling";
+import { BackgroundEffects } from "@/components/BackgroundEffects";
+import { NavMenu } from "@/components/NavMenu";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -46,7 +48,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body className={`${playfair.variable} ${lato.variable} ${greatVibes.variable} ${anekMalayalam.variable} ${zain.variable}`}>
         <SmoothScrolling>
+          <BackgroundEffects />
           <Providers>
+            <NavMenu />
             {children}
           </Providers>
         </SmoothScrolling>
