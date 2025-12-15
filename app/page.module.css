@@ -79,6 +79,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  align-items: center;
 }
 
 .name {
@@ -313,7 +314,7 @@
 /* CSS Heart Animation (User Provided) */
 .heartWrapper {
   position: relative;
-  width: 96%;
+  width: 100%;
   height: 100px;
   /* Space for the heart */
   display: flex;
