@@ -1,0 +1,315 @@
+/* Adapted from Uiverse.io by bociKond */
+
+.container {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 50;
+    /* Transition is handled via inline styles for swipe, or class for reset */
+    touch-action: none;
+}
+
+
+.animating {
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .container {
+        bottom: 20px;
+        left: 50%;
+        /* Base transform is -50% for centering, we'll add to this in JS */
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 350px;
+    }
+}
+
+.card {
+    position: relative;
+    width: 100%;
+    min-width: 280px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    box-shadow: var(--glass-shadow);
+    color: var(--foreground);
+}
+
+.closeBtn {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--foreground);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.2s ease;
+}
+
+.container:hover .closeBtn,
+.card:active .closeBtn {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Always show close button on mobile if needed, or keep hover behavior */
+@media (max-width: 768px) {
+    .closeBtn {
+        opacity: 1;
+        transform: scale(1);
+        top: -8px;
+        right: -8px;
+    }
+}
+
+.top {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.pfp {
+    position: relative;
+    height: 40px;
+    width: 40px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.texts {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.title1 {
+    color: var(--foreground);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.2;
+    font-family: var(--font-arabic);
+}
+
+.title2 {
+    color: var(--primary);
+    font-size: 0.75rem;
+    margin: 0;
+    opacity: 0.8;
+}
+
+.songTime {
+    width: 100%;
+    margin-inline: auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.time {
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
+    height: 4px;
+    border-radius: 2px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+:global(.dark) .time {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.elapsed {
+    background-color: var(--primary);
+    height: 100%;
+    border-radius: 2px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: width 0.1s linear;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 1.5rem;
+    margin-top: 0.2rem;
+    position: relative;
+}
+
+.playBtn {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--foreground);
+    background: none;
+    border: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.playBtn:hover {
+    color: var(--primary);
+    transform: scale(1.1);
+}
+
+.volumeBtn {
+    background: none;
+    border: none;
+    color: var(--foreground);
+    cursor: pointer;
+    opacity: 0.7;
+    transition: all 0.2s ease;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.volumeBtn:hover {
+    opacity: 1;
+    color: var(--primary);
+}
+
+.volumeContainer {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--card);
+    padding: 4px 8px;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 10;
+}
+
+.showVolume {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.volumeSlider {
+    -webkit-appearance: none;
+    width: 80px;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(0, 0, 0, 0.1);
+    outline: none;
+}
+
+:global(.dark) .volumeSlider {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.volumeSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.volumeSlider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+.timetext {
+    color: var(--foreground);
+    font-size: 0.7rem;
+    font-family: monospace;
+    min-width: 35px;
+    opacity: 0.8;
+}
+
+.playing {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    gap: 2px;
+    width: 20px;
+    height: 20px;
+    align-items: flex-end;
+}
+
+.greenline {
+    background-color: var(--primary);
+    height: 20px;
+    width: 2px;
+    position: relative;
+    transform-origin: bottom;
+}
+
+.isPlaying .line1 {
+    animation: playing 1s infinite ease-in-out 0.2s;
+}
+
+.isPlaying .line2 {
+    animation: playing 1s infinite ease-in-out 0.5s;
+}
+
+.isPlaying .line3 {
+    animation: playing 1s infinite ease-in-out 0.6s;
+}
+
+.isPlaying .line4 {
+    animation: playing 1s infinite ease-in-out 0s;
+}
+
+.isPlaying .line5 {
+    animation: playing 1s infinite ease-in-out 0.4s;
+}
+
+@keyframes playing {
+    0% {
+        transform: scaleY(0.1);
+    }
+
+    33% {
+        transform: scaleY(0.6);
+    }
+
+    66% {
+        transform: scaleY(0.9);
+    }
+
+    100% {
+        transform: scaleY(0.1);
+    }
+}

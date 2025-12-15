@@ -3,6 +3,7 @@ import { Providers } from "./providers";
 import { SmoothScrolling } from "@/components/SmoothScrolling";
 import { BackgroundEffects } from "@/components/BackgroundEffects";
 import { NavMenu } from "@/components/NavMenu";
+import { MusicPlayer } from "@/components/MusicPlayer";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -51,6 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <BackgroundEffects />
           <Providers>
             <NavMenu />
+            <MusicPlayer />
             {children}
           </Providers>
         </SmoothScrolling>
