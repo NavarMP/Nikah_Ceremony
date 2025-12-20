@@ -2,6 +2,7 @@
 
 import { CalendarPlus } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
+import { AnimatedButton } from './AnimatedButton';
 
 export function AddToCalendar() {
     const { t } = useLanguage();
@@ -17,28 +18,12 @@ export function AddToCalendar() {
     const googleCalendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${event.beginDate}/${event.endDate}&details=${encodeURIComponent(event.details)}&location=${encodeURIComponent(event.location)}&sf=true&output=xml`;
 
     return (
-        <a
+        <AnimatedButton
+            text={t.addToCalendar}
             href={googleCalendarUrl}
             target="_blank"
             rel="noopener noreferrer"
-            style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '12px 24px',
-                background: 'var(--primary)',
-                color: 'var(--background)',
-                borderRadius: '50px',
-                textDecoration: 'none',
-                fontWeight: 'bold',
-                transition: 'transform 0.2s',
-                boxShadow: 'var(--shadow)'
-            }}
-            onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-            onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
-        >
-            <CalendarPlus size={20} />
-            {t.addToCalendar}
-        </a>
+        />
     );
 }
+

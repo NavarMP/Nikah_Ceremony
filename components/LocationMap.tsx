@@ -1,6 +1,7 @@
 'use client';
 
 import { useLanguage } from '@/context/LanguageContext';
+import { AnimatedButton } from './AnimatedButton';
 
 export function LocationMap() {
     const { t } = useLanguage();
@@ -37,22 +38,6 @@ export function LocationMap() {
                 ></iframe>
             </div>
 
-            <a
-                href="https://www.google.com/maps/search/?api=1&query=Oasis+Avenue,+Chirappalam,+Kadungallur"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    color: 'var(--primary)',
-                    textDecoration: 'none',
-                    fontWeight: '600',
-                    fontSize: '1rem'
-                }}
-            >
-                {t.getDirections}
-            </a>
         </div>
     );
 }

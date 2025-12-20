@@ -1,4 +1,6 @@
 'use client';
+import { SaveTheDate } from "@/components/SaveTheDate";
+
 
 import Image from "next/image";
 import { useState, useEffect, useRef } from 'react';
@@ -10,6 +12,7 @@ import { AddToCalendar } from "@/components/AddToCalendar";
 import { LocationMap } from "@/components/LocationMap";
 import { Countdown } from "@/components/Countdown";
 import { WebReminder } from "@/components/WebReminder";
+import { AnimatedButton } from "@/components/AnimatedButton";
 import { DownloadFlyer } from "@/components/DownloadFlyer";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -101,7 +104,10 @@ export default function Home() {
             <div className={styles.divider}></div>
 
             {/* Moved Save the Date here */}
-            <div className={styles.saveTheDate} style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>{t.saveTheDate}</div>
+            <div className={styles.saveTheDate} style={{ marginBottom: '0.5rem' }}>
+              <SaveTheDate text={t.saveTheDate} />
+            </div>
+
 
             <div className={styles.dateSection}>
               <div className={styles.dateMonthYear} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center' }}>
@@ -120,11 +126,24 @@ export default function Home() {
             </div>
 
             <div className={styles.timeLocation}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center', color: 'var(--color-gold)', fontWeight: 'bold' }}>
-                <MapPin size={18} />
-                <span>{t.location.line1}</span>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                  <MapPin size={24} className={styles.locationIcon} color="var(--color-gold)" />
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', color: 'var(--color-gold)', fontWeight: 'bold', lineHeight: '1.3', textAlign: 'left' }}>
+                    <span>{t.location.line1}</span>
+                    <span>{t.location.line2}</span>
+                  </div>
+                </div>
+                <AnimatedButton
+                  text={t.getDirections}
+                  href="https://www.google.com/maps/search/?api=1&query=Oasis+Avenue,+Chirappalam,+Kadungallur"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  showArrows={false}
+                  className={styles.miniButton}
+                  style={{ padding: '8px 16px', fontSize: '0.85rem', height: '36px' }}
+                />
               </div>
-              <span>{t.location.line2}</span>
             </div>
           </div>
 

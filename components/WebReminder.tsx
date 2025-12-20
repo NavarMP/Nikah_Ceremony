@@ -1,13 +1,27 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Bell, BellRing, ChevronDown } from 'lucide-react';
-import styles from '../app/page.module.css';
+import { AnimatedButton } from './AnimatedButton';
+import styles from './WebReminder.module.css';
 
 export function WebReminder() {
     const [permission, setPermission] = useState<NotificationPermission>('default');
     const [isReminderSet, setIsReminderSet] = useState(false);
     const [reminderTime, setReminderTime] = useState('day_before');
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+    // Close dropdown on click outside
+    const dropdownRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsDropdownOpen(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, [dropdownRef]);
 
     useEffect(() => {
         if (typeof window !== 'undefined' && 'Notification' in window) {
@@ -15,7 +29,6 @@ export function WebReminder() {
             const reminder = localStorage.getItem('nikah_reminder');
             if (reminder) {
                 setIsReminderSet(true);
-                // We could also check logic here
             }
         }
     }, []);
@@ -64,36 +77,49 @@ export function WebReminder() {
         }
     };
 
-    const buttonContent = (
-        <button
-            onClick={toggleReminder}
-            className={styles.actionButton}
-        // disabled={isReminderSet} -> Removed disabled to allow click to unset
-        >
-            {isReminderSet ? <BellRing size={16} /> : <Bell size={16} />}
-            {isReminderSet ? 'Reminder Set' : 'Set Reminder'}
-        </button>
-    );
+    const options = [
+        { value: 'day_before', label: '1 Day Before' },
+        { value: 'week_before', label: '1 Week Before' },
+        { value: 'morning_of', label: 'Morning of Event' }
+    ];
 
-    if (isReminderSet) {
-        return buttonContent;
-    }
+    const currentLabel = options.find(o => o.value === reminderTime)?.label;
 
     return (
-        <div className={styles.reminderGroup}>
-            <div className={styles.selectWrapper}>
-                <select
-                    value={reminderTime}
-                    onChange={(e) => setReminderTime(e.target.value)}
-                    className={styles.reminderSelect}
-                >
-                    <option value="day_before">1 Day Before</option>
-                    <option value="week_before">1 Week Before</option>
-                    <option value="morning_of">Morning of Event</option>
-                </select>
-                <ChevronDown size={14} className={styles.selectIcon} />
-            </div>
-            {buttonContent}
+        <div className={`${styles.reminderGroup} ${isReminderSet ? styles.set : ''}`}>
+            {!isReminderSet && (
+                <div className={styles.selectWrapper} ref={dropdownRef}>
+                    <div
+                        className={styles.customSelectTrigger}
+                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    >
+                        <span>{currentLabel}</span>
+                        <ChevronDown size={14} style={{ transform: isDropdownOpen ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s' }} />
+                    </div>
+                    <div className={`${styles.customSelectOptions} ${isDropdownOpen ? styles.open : ''}`}>
+                        {options.map(option => (
+                            <div
+                                key={option.value}
+                                className={`${styles.option} ${reminderTime === option.value ? styles.selected : ''}`}
+                                onClick={() => {
+                                    setReminderTime(option.value);
+                                    setIsDropdownOpen(false);
+                                }}
+                            >
+                                {option.label}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            <AnimatedButton
+                onClick={toggleReminder}
+                text={isReminderSet ? 'Reminder Set' : 'Set Reminder'}
+                showArrows={false}
+                icon={isReminderSet ? <BellRing size={16} /> : <Bell size={16} />}
+                isActive={isReminderSet}
+            />
         </div>
     );
 }

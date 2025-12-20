@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Volume2, VolumeX, X } from 'lucide-react';
+import { Play, Pause, Volume2, VolumeX, X, ChevronUp } from 'lucide-react';
+import Image from 'next/image';
 import styles from './MusicPlayer.module.css';
 
 export function MusicPlayer() {
@@ -13,11 +14,31 @@ export function MusicPlayer() {
     const [volume, setVolume] = useState(1);
     const [showVolume, setShowVolume] = useState(false);
     const [isHidden, setIsHidden] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(false);
 
     // Swipe handling
     const touchStartX = useRef(0);
     const currentTranslateX = useRef(0);
     const [isDragging, setIsDragging] = useState(false);
+
+    // Click outside to collapse
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (isExpanded && containerRef.current && !containerRef.current.contains(event.target as Node)) {
+                setIsExpanded(false);
+            }
+        }
+
+        if (isExpanded) {
+            document.addEventListener("mousedown", handleClickOutside);
+            document.addEventListener("touchstart", (e) => handleClickOutside(e as unknown as MouseEvent));
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("touchstart", (e) => handleClickOutside(e as unknown as MouseEvent));
+        };
+    }, [isExpanded]);
 
     useEffect(() => {
         const audio = audioRef.current;
@@ -120,10 +141,8 @@ export function MusicPlayer() {
 
     // Swipe Logic 1:1 Tracking
     const onTouchStart = (e: React.TouchEvent) => {
-        // Don't track if touch started on volume slider or close button handled by stopPropagation ideally
         touchStartX.current = e.targetTouches[0].clientX;
         setIsDragging(true);
-        // Remove animation class for instant tracking
         if (containerRef.current) {
             containerRef.current.classList.remove(styles.animating);
         }
@@ -133,30 +152,15 @@ export function MusicPlayer() {
         if (!isDragging) return;
         const currentX = e.targetTouches[0].clientX;
         const delta = currentX - touchStartX.current;
-
-        // Only allow swiping (negative delta = left, positive = right)
-        // We can restrict direction if needed, but multidirectional is fine for dismissal
         currentTranslateX.current = delta;
 
         if (containerRef.current) {
-            containerRef.current.style.transform = `translateX(calc(-50% + ${delta}px))`;
-            // Note: -50% is the base mobile position. 
-            // However, desktop has different base. 
-            // We should rely on the CSS base and just use translate3d if possible, 
-            // but since CSS uses left: 50% transform: translateX(-50%), we need to maintain that offset.
-            // Let's check window width or simple generic transform.
-
-            // Actually, simpler approach: Apply `transform: translateX(delta)` on top of CSS? 
-            // No, inline style overrides. 
-            // If window.innerWidth <= 768: `translateX(calc(-50% + ${delta}px))`
-            // If desktop: `translateX(${delta}px)` (since desktop starts at 0)
-
             if (window.innerWidth <= 768) {
                 containerRef.current.style.transform = `translateX(calc(-50% + ${delta}px))`;
             } else {
                 containerRef.current.style.transform = `translateX(${delta}px)`;
             }
-            containerRef.current.style.opacity = `${1 - Math.abs(delta) / 300}`; // Fade out
+            containerRef.current.style.opacity = `${1 - Math.abs(delta) / 300}`;
         }
     };
 
@@ -165,22 +169,19 @@ export function MusicPlayer() {
         setIsDragging(false);
 
         if (containerRef.current) {
-            containerRef.current.classList.add(styles.animating); // Add smooth transition for snap/dismiss
+            containerRef.current.classList.add(styles.animating);
 
             const threshold = 100; // px
             if (Math.abs(currentTranslateX.current) > threshold) {
-                // Dismiss
                 const direction = currentTranslateX.current > 0 ? 1 : -1;
-                // Move completely off screen
                 if (window.innerWidth <= 768) {
                     containerRef.current.style.transform = `translateX(calc(-50% + ${direction * 100}vw))`;
                 } else {
                     containerRef.current.style.transform = `translateX(${direction * 100}vw)`;
                 }
                 containerRef.current.style.opacity = '0';
-                setTimeout(() => setIsHidden(true), 300); // Unmount after animation
+                setTimeout(() => setIsHidden(true), 300);
             } else {
-                // Snap back
                 if (window.innerWidth <= 768) {
                     containerRef.current.style.transform = 'translateX(-50%)';
                 } else {
@@ -193,8 +194,12 @@ export function MusicPlayer() {
     };
 
     const handleContainerClick = (e: React.MouseEvent) => {
-        // Prevent dismissal when clicking inside if we had "click outside to dismiss" (not case here)
-        // But ensures clicks on player don't bubble up weirdly
+        // e.stopPropagation();
+    };
+
+    const toggleExpand = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setIsExpanded(!isExpanded);
     };
 
     const progressPercent = duration ? (currentTime / duration) * 100 : 0;
@@ -203,7 +208,7 @@ export function MusicPlayer() {
 
     return (
         <div
-            className={styles.container}
+            className={`${styles.container} ${!isExpanded ? styles.compact : ''}`}
             ref={containerRef}
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
@@ -225,79 +230,88 @@ export function MusicPlayer() {
             />
 
             <div className={styles.card}>
-                <div className={styles.top}>
-                    <div className={styles.pfp}>
-                        <div className={`${styles.playing} ${isPlaying ? styles.isPlaying : ''}`}>
-                            <div className={`${styles.greenline} ${styles.line1}`}></div>
-                            <div className={`${styles.greenline} ${styles.line2}`}></div>
-                            <div className={`${styles.greenline} ${styles.line3}`}></div>
-                            <div className={`${styles.greenline} ${styles.line4}`}></div>
-                            <div className={`${styles.greenline} ${styles.line5}`}></div>
+
+                {/* Left: Cover Art */}
+                <div className={styles.coverWrapper}>
+                    <Image
+                        src="/assets/music cover.jpg"
+                        alt="Album Cover"
+                        width={300}
+                        height={300}
+                        className={styles.coverImage}
+                    />
+                </div>
+
+                {/* Middle: Content */}
+                <div className={styles.middleContent}>
+                    {/* Text Track - Hidden in Compact Mode logic handled via CSS or conditional */}
+                    <div className={`${styles.textTrack} ${!isExpanded ? styles.hidden : ''}`}>
+                        <p className={styles.titleComp}>عروسة النور</p>
+                        <p className={styles.artistComp}>Muhammad Al Muqit</p>
+                    </div>
+
+                    {!isExpanded && (
+                        <div className={styles.compactControls}>
+                            <button className={styles.miniPlayBtn} onClick={(e) => { e.stopPropagation(); togglePlay(); }}>
+                                {isPlaying ? <Pause size={18} fill="currentColor" /> : <Play size={18} fill="currentColor" />}
+                            </button>
+
+                            <div className={styles.compactProgressWrapper} onClick={handleProgressChange} onTouchStart={(e) => e.stopPropagation()}>
+                                <div className={styles.compactProgressBar}>
+                                    <div className={styles.compactProgressFill} style={{ width: `${progressPercent}%` }}></div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div className={styles.texts}>
-                        <p className={styles.title1}>عروسة النور</p>
-                        <p className={styles.title2}>Muhammad Al Muqit</p>
-                    </div>
+                    )}
                 </div>
 
-                <div className={styles.songTime}>
-                    <p className={styles.timetext}>
-                        {formatTime(currentTime)}
-                    </p>
-                    <div className={styles.time} onClick={handleProgressChange} onTouchStart={(e) => e.stopPropagation()}>
-                        <div
-                            className={styles.elapsed}
-                            style={{ width: `${progressPercent}%` }}
-                        ></div>
+
+                {/* Expanded Content (Hidden in compact) */}
+                <div className={styles.expandedContent}>
+                    <div className={styles.songTime}>
+                        <p className={styles.timetext}>{formatTime(currentTime)}</p>
+                        <div className={styles.time} onClick={handleProgressChange} onTouchStart={(e) => e.stopPropagation()}>
+                            <div className={styles.elapsed} style={{ width: `${progressPercent}%` }}></div>
+                        </div>
+                        <p className={styles.timetext}>{formatTime(duration)}</p>
                     </div>
-                    <p className={styles.timetext}>
-                        {formatTime(duration)}
-                    </p>
-                </div>
 
-                <div className={styles.controls}>
-                    <button
-                        className={styles.playBtn}
-                        onClick={(e) => { e.stopPropagation(); togglePlay(); }}
-                        aria-label={isPlaying ? "Pause music" : "Play music"}
-                        onTouchStart={(e) => e.stopPropagation()}
-                    >
-                        {isPlaying ? (
-                            <Pause size={28} fill="currentColor" />
-                        ) : (
-                            <Play size={28} fill="currentColor" />
-                        )}
-                    </button>
-
-                    <div
-                        className={styles.volumeWrapper}
-                        onMouseEnter={() => setShowVolume(true)}
-                        onMouseLeave={() => setShowVolume(false)}
-                        onTouchStart={(e) => e.stopPropagation()} // Stop swipe
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <button
-                            className={styles.volumeBtn}
-                            onClick={(e) => { e.stopPropagation(); setShowVolume(!showVolume); }}
-                        >
-                            {volume === 0 ? <VolumeX size={20} /> : <Volume2 size={20} />}
+                    <div className={styles.controls}>
+                        <button className={styles.playBtn} onClick={(e) => { e.stopPropagation(); togglePlay(); }}>
+                            {isPlaying ? <Pause size={28} fill="currentColor" /> : <Play size={28} fill="currentColor" />}
                         </button>
 
-                        <div className={`${styles.volumeContainer} ${showVolume ? styles.showVolume : ''}`} onClick={(e) => e.stopPropagation()}>
-                            <input
-                                type="range"
-                                min="0"
-                                max="1"
-                                step="0.01"
-                                value={volume}
-                                onChange={handleVolumeChange}
-                                className={styles.volumeSlider}
-                                onTouchStart={(e) => e.stopPropagation()}
-                            />
+                        <div
+                            className={styles.volumeWrapper}
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <button className={styles.volumeBtn} onClick={(e) => { e.stopPropagation(); setShowVolume(!showVolume); }}>
+                                {volume === 0 ? <VolumeX size={20} /> : <Volume2 size={20} />}
+                            </button>
+                            {/* Always show slider in expanded mode? Using logic to auto-show for now */}
+                            <div className={`${styles.volumeContainer} ${showVolume ? styles.showVolume : ''}`}>
+                                <input
+                                    type="range"
+                                    min="0"
+                                    max="1"
+                                    step="0.01"
+                                    value={volume}
+                                    onChange={handleVolumeChange}
+                                    className={styles.volumeSlider}
+                                    onTouchStart={(e) => e.stopPropagation()}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                {/* Right: Chevron */}
+                <div className={styles.chevronWrapper} onClick={toggleExpand}>
+                    <button className={styles.expandBtn}>
+                        <ChevronUp size={20} />
+                    </button>
+                </div>
+
             </div>
         </div>
     );

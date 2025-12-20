@@ -17,24 +17,83 @@
     display: none;
 }
 
-.menuButton {
+/* Animated Hamburger Menu */
+.hamburgerContainer {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    font-size: 20px;
+    user-select: none;
+    /* Container styling to match previous button look if needed, 
+       but standardizing on the animated look which is usually standalone.
+       Adding a background circle just in case like before. */
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.4);
     border-radius: 50%;
-    padding: 0.5rem;
-    cursor: pointer;
-    color: var(--primary);
+    /* Fixed size and centering logic */
+    width: 48px;
+    height: 48px;
+    padding: 0;
     display: flex;
-    align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
+    align-items: center;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
-.menuButton:hover {
-    background: rgba(255, 255, 255, 0.4);
-    transform: scale(1.05);
+.hamburgerContainer input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: relative;
+    top: 0;
+    left: 0;
+    height: 1.3em;
+    width: 1.3em;
+}
+
+.checkmark span {
+    width: 24px;
+    /* Adjusted size to fit inside 44px button comfortably */
+    height: 3px;
+    /* Slightly thicker */
+    background-color: var(--primary);
+    /* Theme color */
+    position: absolute;
+    transition: all 0.3s ease-in-out;
+    border-radius: 2px;
+}
+
+.checkmark span:nth-child(1) {
+    top: 10%;
+}
+
+.checkmark span:nth-child(2) {
+    top: 50%;
+}
+
+.checkmark span:nth-child(3) {
+    top: 90%;
+}
+
+.hamburgerContainer input:checked+.checkmark span:nth-child(1) {
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+}
+
+.hamburgerContainer input:checked+.checkmark span:nth-child(2) {
+    top: 50%;
+    transform: translateY(-50%) rotate(-45deg);
+}
+
+.hamburgerContainer input:checked+.checkmark span:nth-child(3) {
+    transform: translateX(-50px);
+    opacity: 0;
 }
 
 .mobileMenu {

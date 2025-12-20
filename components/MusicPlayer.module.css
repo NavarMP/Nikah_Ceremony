@@ -5,10 +5,9 @@
     bottom: 20px;
     left: 20px;
     z-index: 50;
-    /* Transition is handled via inline styles for swipe, or class for reset */
     touch-action: none;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
 
 .animating {
     transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease;
@@ -18,10 +17,15 @@
     .container {
         bottom: 20px;
         left: 50%;
-        /* Base transform is -50% for centering, we'll add to this in JS */
         transform: translateX(-50%);
         width: 90%;
         max-width: 350px;
+    }
+
+    .container.compact {
+        width: auto;
+        min-width: 250px;
+        max-width: 90%;
     }
 }
 
@@ -29,10 +33,9 @@
     position: relative;
     width: 100%;
     min-width: 280px;
-    background: var(--glass-bg);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid var(--glass-border);
+    background: var(--card);
+    /* Solid background */
+    border: 1px solid var(--border);
     border-radius: 16px;
     padding: 1rem;
     display: flex;
@@ -40,91 +43,197 @@
     gap: 0.8rem;
     box-shadow: var(--glass-shadow);
     color: var(--foreground);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
 }
 
-.closeBtn {
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    background: var(--card);
+/* Compact Mode Overrides */
+.container.compact .card {
+    min-width: unset;
+    padding: 0.5rem;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.8rem;
+    border-radius: 50px;
+    padding-right: 0.5rem;
+    /* Space for chevron area */
+}
+
+/* Hide expanded content in compact mode */
+.container.compact .expandedContent {
+    display: none;
+}
+
+/* Hide compact widgets in expanded mode */
+.container:not(.compact) .compactControls {
+    display: none;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ------------------------------------------- */
+/* Cover Art */
+/* ------------------------------------------- */
+/* ------------------------------------------- */
+/* Cover Art */
+/* ------------------------------------------- */
+.coverWrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1/1;
+    border-radius: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
     border: 1px solid var(--border);
-    color: var(--foreground);
+    margin-bottom: 0.5rem;
+}
+
+.container.compact .coverWrapper {
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    width: 24px;
-    height: 24px;
+    margin-bottom: 0;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.coverImage {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+/* In expanded mode maybe make it slightly bigger or square? keeping circle for consistency */
+
+/* ------------------------------------------- */
+/* Text & Middle Section */
+/* ------------------------------------------- */
+.middleContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    min-width: 120px;
+    /* Ensure space for flex items */
+}
+
+.textTrack {
+    display: flex;
+    flex-direction: column;
+}
+
+.titleComp {
+    font-family: var(--font-arabic);
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.artistComp {
+    font-size: 0.7rem;
+    opacity: 0.7;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* ------------------------------------------- */
+/* Merged Controls (Compact Mode) */
+/* ------------------------------------------- */
+/* ------------------------------------------- */
+/* V5 Compact Controls */
+/* ------------------------------------------- */
+.compactControls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    height: 100%;
+    width: 100%;
+    padding-right: 8px;
+    /* Spacing before chevron */
+    min-width: 100px;
+    /* Force minimum width to show progress bar */
+}
+
+.miniPlayBtn {
+    background: none;
+    border: none;
+    color: var(--foreground);
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-    opacity: 0;
-    transform: scale(0.8);
-    transition: all 0.2s ease;
+    transition: transform 0.2s;
+    flex-shrink: 0;
 }
 
-.container:hover .closeBtn,
-.card:active .closeBtn {
-    opacity: 1;
-    transform: scale(1);
+.miniPlayBtn:hover {
+    transform: scale(1.1);
+    color: var(--primary);
 }
 
-/* Always show close button on mobile if needed, or keep hover behavior */
-@media (max-width: 768px) {
-    .closeBtn {
-        opacity: 1;
-        transform: scale(1);
-        top: -8px;
-        right: -8px;
-    }
+.compactProgressWrapper {
+    flex: 1;
+    height: 12px;
+    /* Touch target */
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    min-width: 50px;
+    /* Force minimum width */
 }
 
-.top {
-    position: relative;
+.compactProgressBar {
     width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.pfp {
+    height: 4px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
     position: relative;
-    height: 40px;
-    width: 40px;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    overflow: hidden;
 }
 
-.texts {
+:global(.dark) .compactProgressBar {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.compactProgressFill {
+    background-color: var(--primary);
+    height: 100%;
+    border-radius: 2px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: width 0.1s linear;
+}
+
+/* ------------------------------------------- */
+/* Expanded Content */
+/* ------------------------------------------- */
+.expandedContent {
     display: flex;
     flex-direction: column;
-    gap: 2px;
-    flex: 1;
+    gap: 0.8rem;
+    margin-top: 0.5rem;
+    width: 100%;
 }
 
-.title1 {
-    color: var(--foreground);
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin: 0;
-    line-height: 1.2;
-    font-family: var(--font-arabic);
-}
-
-.title2 {
-    color: var(--primary);
-    font-size: 0.75rem;
-    margin: 0;
-    opacity: 0.8;
+.container:not(.compact) .middleContent {
+    /* In expanded mode, center text maybe? */
+    align-items: flex-start;
 }
 
 .songTime {
     width: 100%;
-    margin-inline: auto;
-    position: relative;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -137,11 +246,6 @@
     border-radius: 2px;
     cursor: pointer;
     position: relative;
-    overflow: hidden;
-}
-
-:global(.dark) .time {
-    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .elapsed {
@@ -154,102 +258,6 @@
     transition: width 0.1s linear;
 }
 
-.controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    gap: 1.5rem;
-    margin-top: 0.2rem;
-    position: relative;
-}
-
-.playBtn {
-    cursor: pointer;
-    transition: all 0.2s ease;
-    color: var(--foreground);
-    background: none;
-    border: none;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.playBtn:hover {
-    color: var(--primary);
-    transform: scale(1.1);
-}
-
-.volumeBtn {
-    background: none;
-    border: none;
-    color: var(--foreground);
-    cursor: pointer;
-    opacity: 0.7;
-    transition: all 0.2s ease;
-    padding: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.volumeBtn:hover {
-    opacity: 1;
-    color: var(--primary);
-}
-
-.volumeContainer {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: var(--card);
-    padding: 4px 8px;
-    border-radius: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s ease;
-    z-index: 10;
-}
-
-.showVolume {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.volumeSlider {
-    -webkit-appearance: none;
-    width: 80px;
-    height: 4px;
-    border-radius: 2px;
-    background: rgba(0, 0, 0, 0.1);
-    outline: none;
-}
-
-:global(.dark) .volumeSlider {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.volumeSlider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: var(--primary);
-    cursor: pointer;
-    transition: transform 0.1s;
-}
-
-.volumeSlider::-webkit-slider-thumb:hover {
-    transform: scale(1.2);
-}
-
 .timetext {
     color: var(--foreground);
     font-size: 0.7rem;
@@ -258,58 +266,141 @@
     opacity: 0.8;
 }
 
-.playing {
+.controls {
     display: flex;
-    position: relative;
     justify-content: center;
-    gap: 2px;
+    align-items: center;
+    width: 100%;
+    gap: 1.5rem;
+    position: relative;
+}
+
+.playBtn {
+    color: var(--foreground);
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.playBtn:hover {
+    transform: scale(1.1);
+    color: var(--primary);
+}
+
+.volumeWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.volumeBtn {
+    background: none;
+    border: none;
+    color: var(--foreground);
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+.volumeContainer {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--card);
+    padding: 4px 8px;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+}
+
+.showVolume {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.volumeSlider {
+    width: 80px;
+    height: 4px;
+    border-radius: 2px;
+    appearance: none;
+    background: rgba(0, 0, 0, 0.1);
+    outline: none;
+}
+
+.volumeSlider::-webkit-slider-thumb {
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+}
+
+/* ------------------------------------------- */
+/* Chevron */
+/* ------------------------------------------- */
+.chevronWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 4px;
+    margin-left: auto;
+    /* Push to right */
+}
+
+.expandBtn {
+    background: none;
+    border: none;
+    color: var(--foreground);
+    opacity: 0.6;
+    transition: transform 0.3s ease;
+    padding: 0;
+    display: flex;
+}
+
+.container:not(.compact) .expandBtn {
+    transform: rotate(180deg);
+}
+
+
+/* ------------------------------------------- */
+/* Close Button */
+/* ------------------------------------------- */
+.closeBtn {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--foreground);
+    border-radius: 50%;
     width: 20px;
     height: 20px;
-    align-items: flex-end;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.2s ease;
 }
 
-.greenline {
-    background-color: var(--primary);
-    height: 20px;
-    width: 2px;
-    position: relative;
-    transform-origin: bottom;
+.container:hover .closeBtn,
+.card:active .closeBtn {
+    opacity: 1;
+    transform: scale(1);
 }
 
-.isPlaying .line1 {
-    animation: playing 1s infinite ease-in-out 0.2s;
-}
-
-.isPlaying .line2 {
-    animation: playing 1s infinite ease-in-out 0.5s;
-}
-
-.isPlaying .line3 {
-    animation: playing 1s infinite ease-in-out 0.6s;
-}
-
-.isPlaying .line4 {
-    animation: playing 1s infinite ease-in-out 0s;
-}
-
-.isPlaying .line5 {
-    animation: playing 1s infinite ease-in-out 0.4s;
-}
-
-@keyframes playing {
-    0% {
-        transform: scaleY(0.1);
-    }
-
-    33% {
-        transform: scaleY(0.6);
-    }
-
-    66% {
-        transform: scaleY(0.9);
-    }
-
-    100% {
-        transform: scaleY(0.1);
+@media (max-width: 768px) {
+    .closeBtn {
+        opacity: 1;
+        transform: scale(1);
     }
 }

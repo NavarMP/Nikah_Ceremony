@@ -1,0 +1,51 @@
+.svgContainer {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.svg {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.05));
+}
+
+.handwrittenText {
+    fill: none;
+    stroke: var(--foreground);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 2000;
+    stroke-dashoffset: 2000;
+    animation: write 3s ease-in-out forwards;
+    font-family: var(--font-script), cursive;
+}
+
+.fillText {
+    fill: var(--foreground);
+    opacity: 0;
+    animation: fadeIn 0.5s ease-in forwards 1.5s;
+    font-family: var(--font-script), cursive;
+}
+
+/* Use primary color (gold) if preferred, or rely on foreground/custom logic */
+:global(.dark) .handwrittenText {
+    stroke: var(--color-gold);
+}
+
+:global(.dark) .fillText {
+    fill: var(--color-gold);
+}
+
+@keyframes write {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
