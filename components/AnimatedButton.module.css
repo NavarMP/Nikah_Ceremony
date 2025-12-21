@@ -26,11 +26,15 @@
 }
 
 .animatedButton svg {
+    fill: var(--primary);
+    transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.animatedButton .arr-1,
+.animatedButton .arr-2 {
     position: absolute;
     width: 24px;
-    fill: var(--primary);
     z-index: 9;
-    transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .animatedButton .arr-1 {
@@ -107,9 +111,9 @@
     transform: translateX(0) !important;
 }
 
-.noArrow svg {
+/* .noArrow svg {
     display: none;
-}
+} - Removed to allow icons in no-arrow buttons */
 
 /* Active State (Permanently Filled) */
 .active {
