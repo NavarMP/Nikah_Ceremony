@@ -75,3 +75,13 @@ a {
 .font-arabic * {
   font-family: var(--font-arabic) !important;
 }
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}

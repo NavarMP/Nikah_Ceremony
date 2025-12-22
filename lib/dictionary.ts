@@ -29,6 +29,8 @@ export const dictionary = {
         addToCalendar: "Add to Calendar",
         getDirections: "Get Directions",
         downloadFlyer: "Download Flyer",
+        downloading: "Downloading...",
+        openFlyer: "Open Flyer",
     },
     ml: {
         bismillah: "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
@@ -58,6 +60,8 @@ export const dictionary = {
         addToCalendar: "കലണ്ടറിൽ ചേർക്കൂ",
         getDirections: "വഴി അറിയാൻ",
         downloadFlyer: "ക്ഷണക്കത്ത് ഡൗൺലോഡ്",
+        downloading: "ഡൗൺലോഡ് ചെയ്യുന്നു...",
+        openFlyer: "ഫ്ലയർ തുറക്കൂ",
     },
     ar: {
         bismillah: "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
@@ -87,5 +91,7 @@ export const dictionary = {
         addToCalendar: "إضافة إلى التقويم",
         getDirections: "احصل على الاتجاهات",
         downloadFlyer: "تحميل الدعوة",
+        downloading: "جار التحميل...",
+        openFlyer: "افتح الدعوة",
     },
 };
